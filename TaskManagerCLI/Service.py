@@ -1,40 +1,30 @@
-import Task
+import TaskManagerCLI.Task as task
 import argparse
 
 class Service:
     def __init__(self, AC):
         self.endpoints = AC.Endpoints
+        self.current_task = None
 
     def add_task(self, name: str):
-        self.endpoints.TaskList.append(Task.Task(name))
+        self.current_task = task.Task(name)
+        self.endpoints.LinkedList.append(self.current_task)
 
     def update_task(self, name_old, name_new):
-        for task in self.endpoints.TaskList:
-            if task.name == name_old:
-                task.name = name_new
-                print(f'Task name {name_old} was successfully updated to {task.name}.')
-            else:
-                print("Task name not found.")
+        self.endpoints.LinkedList.update(name_old, task.Task(name_new))
 
     def delete_task(self, name):
-        for task in self.endpoints.TaskList:
-            if task.name == name:
-                print(f'Task named: {task.name} was deleted successfully')
-                task.pop()
-            else:
-                print("Task name not found.")
+        self.endpoints.LinkedList.remove(name)
 
     def mark_task(self, name: str, status_update: int):
-        try:
-            for task in self.endpoints.TaskList:
-                if task.name == name:
-                    task.status = status_update
-                    print(f"Task marked as {task.status.strip()}")
-        except TypeError:
-            print(f"{TypeError} in mark_task\nPlease don't fuck it up next time")
+        node = self.endpoints.LinkedList.head
+        while node is not None:
+            if node.value.name == name:
+                node.value.status = status_update
+                break
+            node = node.next
 
-        finally:
-            print("Mark_Task reached finally")
+
 
 
 

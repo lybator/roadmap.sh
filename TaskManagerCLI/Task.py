@@ -13,17 +13,12 @@ class Task:
 
     @property
     def status(self):
-        if self._status == 0:
-            return "    Started"
-        elif self._status == 1:
-            return "In Progress"
-        elif self._status > 1:
-            return "       Done"
+       return self._status
 
     @status.setter
     def status(self, value):
         self._status = value
 
     def to_string(self):
-        return(f'{self.name + " " + self.status}')
+        print(f'{self.name + " " + self.status}')
 

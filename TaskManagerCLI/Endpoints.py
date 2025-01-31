@@ -47,26 +47,60 @@ class Linkedlist:
         temp.previous = new_node
         new_node.next = temp
 
+    def update(self, value, new_value):
+        temp = self.find_node(value)
+        new_temp = Node(new_value)
+        new_temp.value.status = temp.value.status
+        if temp.previous is not None and temp.next is not None:
+            temp.previous.next = new_temp
+            new_temp.previous = temp.previous
+            temp.next.previous = new_temp
+            new_temp.next = temp.next
+
+        elif temp.previous is None:
+            temp.next.previous = new_temp
+            new_temp.next = temp.next
+            self.head = new_temp
+
+        elif temp.next is None:
+            temp.previous.next = new_temp
+            new_temp.previous = temp.previous
+            self.tail = new_temp
+
+        del temp
+
     def remove(self, value):
         if self.head is None or value is None:
             return
-        temp = self.head
+        temp = self.find_node(value)
+        """self.head
         while temp.next is not None:
             if temp.value == value:
                 break
-            temp = temp.next
+            temp = temp.next"""
 
-        if temp.previous is not None:
+        if temp.previous is not None and temp.next is not None:
             temp.next.previous, temp.previous.next = temp.previous, temp.next
 
         elif temp.previous is None:
             temp.next.previous = temp.previous
             self.head = temp.next
 
+        elif temp.next is None:
+            temp.previous.next = temp.next
+            self.tail = temp.previous
+
+    def find_node(self, value):
+        temp = self.head
+        while temp is not None:
+            if temp.value.name == value:
+                return temp
+            temp = temp.next
+
     def to_string(self):
         if self.head is None:
             return
         temp = self.head
         while temp is not None:
-            print(temp.value)
+            print(f"{temp.value.name}: {temp.value.status}")
             temp = temp.next
